@@ -51,7 +51,7 @@
                         <a class="nav-link <?php echo ($activePage === 'home') ? 'active' : ''; ?>" href="/index.php">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link <?php echo ($activePage === 'dashboard') ? 'active' : ''; ?>" href="/dashboard.php">Dashboard</a>
+                        <a class="nav-link <?php echo ($activePage === 'dashboard') ? 'active' : ''; ?>" href="/dashboard/dashboard.php">Dashboard</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link <?php echo ($activePage === 'contact') ? 'active' : ''; ?>" href="/contact.php">Contact</a>

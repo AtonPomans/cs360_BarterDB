@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../config/database.php';
+include $_SERVER['DOCUMENT_ROOT'] . "/../config/database.php";
 
 $errors = [];
 
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($password, $hashed_password)) {
                 $_SESSION["user_id"] = $id;
                 $_SESSION["user_name"] = $name;
-                header("Location: dashboard.php");
+                header("Location: /dashboard/dashboard.php");
                 exit();
             } else {
                 $errors[] = "Incorrect password.";
@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="btn btn-success w-100">Login</button>
         </form>
-        <p class="mt-3 text-center">Don't have an account? <a href="register.php">Register here</a>.</p>
+        <p class="mt-3 text-center">Don't have an account? <a href="/auth/register.php">Register here</a>.</p>
     </div>
 </body>
 </html>

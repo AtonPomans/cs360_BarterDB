@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../config/database.php';
+include $_SERVER['DOCUMENT_ROOT'] . "/../config/database.php";
 
 $errors = [];
 
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->bind_param("sss", $name, $email, $hashed_password);
         if ($stmt->execute()) {
             $_SESSION["success"] = "Registration successful. Please login.";
-            header("Location: login.php");
+            header("Location: /auth/login.php");
             exit();
         } else {
             $errors[] = "Something went wrong. Please try again.";
@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -84,7 +84,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="btn btn-primary w-100">Register</button>
         </form>
-        <p class="mt-3 text-center">Already have an account? <a href="login.php">Login here</a>.</p>
+        <p class="mt-3 text-center">Already have an account? <a href="/auth/login.php">Login here</a>.</p>
     </div>
 </body>
 </html>

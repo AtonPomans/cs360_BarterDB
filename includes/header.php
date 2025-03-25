@@ -73,8 +73,8 @@ $loggedIn = isset($_SESSION['user_id']);
                             <i class="fa-solid fa-user fa-lg"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="/login.php">Login</a></li>
-                            <li><a class="dropdown-item" href="/register.php">Register</a></li>
+                            <li><a class="dropdown-item" href="/auth/login.php">Login</a></li>
+                            <li><a class="dropdown-item" href="/auth/register.php">Register</a></li>
                         </ul>
                     </li>
 

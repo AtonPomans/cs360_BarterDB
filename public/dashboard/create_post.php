@@ -50,22 +50,83 @@ $requested_item_id = getOrCreateItem($conn, $requested_name);
 $stmt = $conn->prepare("
     INSERT INTO barter_post (
         poster_id, partner_id, offered_item, requested_item,
-        offered_quantity, requested_quantity, is_split_allowed
-    ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        offered_quantity, requested_quantity
+    ) VALUES (?, ?, ?, ?, ?, ?)
 ");
 $stmt->bind_param(
-    "iiiiiii",
+    "iiiiii",
     $poster_id,
     $partner_id,
     $offered_item_id,
     $requested_item_id,
     $offered_quantity,
     $requested_quantity,
-    $is_split_allowed
 );
 $stmt->execute();
 
+
+
+
+
+// Post matching logic
+$new_post_id = $conn->insert_id;
+
+$match_query = "
+    SELECT * FROM barter_post
+    WHERE offered_item = ?
+      AND requested_item = ?
+      AND poster_id != ?
+      AND status = 'open'
+    LIMIT 1
+";
+
+$stmt = $conn->prepare($match_query);
+$stmt->bind_param("iii", $requested_item_id, $offered_item_id, $poster_id);
+$stmt->execute();
+$match_result = $stmt->get_result();
+
+// If match found
+if ($match = $match_result->fetch_assoc()) {
+    $match_post_id = $match['post_id'];
+    $match_user_id = $match['poster_id'];
+
+    // Close both posts
+    $conn->query("UPDATE barter_post SET status = 'closed' WHERE post_id IN ($new_post_id, $match_post_id)");
+
+    // Generate hash
+    $hash = strtoupper(bin2hex(random_bytes(8)));
+    $part_a = substr($hash, 0, 8);
+    $part_y = substr($hash, 8, 8);
+
+    // Insert into transactions table
+    $stmt = $conn->prepare("
+        INSERT INTO transactions (
+            post1_id, post2_id, user1_id, user2_id,
+            item1_id, item2_id, hash_code, part_a_code, part_y_code
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ");
+    $stmt->bind_param(
+        "iiiiissss",
+        $new_post_id,
+        $match_post_id,
+        $poster_id,
+        $match_user_id,
+        $offered_item_id,
+        $requested_item_id,
+        $hash,
+        $part_a,
+        $part_y
+    );
+    $stmt->execute();
+
+    header("Location: dashboard.php?match=1");
+    exit();
+}
+
+
+// If no match found
 header("Location: dashboard.php?post=success");
 exit();
+
 ?>
 

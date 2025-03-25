@@ -6,7 +6,7 @@ $activePage = 'Dashboard'; // Page title
 include $_SERVER['DOCUMENT_ROOT'] . "/../includes/header.php"; // header with navbar
 
 if (!$loggedIn) {
-    header("Location: login.php");
+    header("Location: /auth/login.php");
     exit();
 }
 

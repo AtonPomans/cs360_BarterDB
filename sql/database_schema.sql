@@ -13,10 +13,10 @@ CREATE TABLE users (
 /* Items Table */
 CREATE TABLE items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
+/*    user_id INT, */
     name VARCHAR(255),
-/*    description TEXT, */
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    description TEXT
+/*    FOREIGN KEY (user_id) REFERENCES users(user_id) */
 );
 
 CREATE TABLE barter_post (

@@ -1,5 +1,7 @@
 <?php
-include 'database.php';
+session_start();
+include $_SERVER['DOCUMENT_ROOT'] . "/../config/database.php";
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $transaction_id = $_POST['transaction_id'];

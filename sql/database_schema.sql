@@ -38,8 +38,10 @@ CREATE TABLE IF NOT EXISTS transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     post1_id INT NOT NULL,
     post2_id INT NOT NULL,
-    user1_id INT NOT NULL,
-    user2_id INT NOT NULL,
+    user_a_id INT NOT NULL,  -- A: requester of item P
+    user_b_id INT NOT NULL,  -- B: A’s partner, sends item E
+    user_x_id INT NOT NULL,  -- X: owner of item P
+    user_y_id INT NOT NULL,  -- Y: X’s partner, receives item E
     item1_id INT NOT NULL,
     item2_id INT NOT NULL,
     hash_code VARCHAR(16) NOT NULL,
@@ -53,8 +55,23 @@ CREATE TABLE IF NOT EXISTS transactions (
 
     FOREIGN KEY (post1_id) REFERENCES barter_post(post_id),
     FOREIGN KEY (post2_id) REFERENCES barter_post(post_id),
-    FOREIGN KEY (user1_id) REFERENCES users(user_id),
-    FOREIGN KEY (user2_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_a_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_b_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_x_id) REFERENCES users(user_id),
+    FOREIGN KEY (user_y_id) REFERENCES users(user_id),
     FOREIGN KEY (item1_id) REFERENCES items(item_id),
     FOREIGN KEY (item2_id) REFERENCES items(item_id)
 );
+
+/* test users so no need to re-register (password same as name) */
+INSERT INTO users (name, email, password_hash)
+VALUES
+('aaa', 'aaa@aaa.com', '$2y$10$o19a0uY.KizfX/qoIaz62uabNDnBEcsH1akkrA.vPuNJEXkWJg8OS'),
+('bbb', 'bbb@bbb.com', '$2y$10$2Z1x9JmlPqtT5QjEnSC0TODLQeDmxPMd0IynydDLzLaz57NzVVJGu'),
+('ccc', 'ccc@ccc.com', '$2y$10$2l83k0pLjbQrvoQP3K2q7.fY2VnUd6tpcOVNMIIi15SeHSxd1OqdW'),
+('ddd', 'ddd@ddd.com', '$2y$10$2y61H.gegwQR/iRqqbVTtej7RYcXThVnd0w3yES6CGLgkzTVQHeX.'),
+('eee', 'eee@eee.com', '$2y$10$E1.VKsiKSOOF2G6HK9cYIuh7BF865zWRs6Zt.aYB00/v7gEGH6tqW'),
+('www', 'www@www.com', '$2y$10$Qe1mVP.lWb/GqPfMcHZuyuJZmBPjCWLO6fOMRv9pGZqfswtT/8ziy'),
+('xxx', 'xxx@xxx.com', '$2y$10$xz/hwO/6IgJ338ijiRWPV.Dt0Mi97A27cMNrhyBkelMhSZrsVwTcu'),
+('yyy', 'yyy@yyy.com', '$2y$10$0JtFHDd6.1qEJeuqcg9izeeDfHmfrdnNXHWKNA1R4mqg1nYSW9XCm'),
+('zzz', 'zzz@zzz.com', '$2y$10$ftxQyHuVBVAIBXjtu3Yq7.7ci/Xqk3I3.YFHGBKYM41ZQNE4o5PoK');

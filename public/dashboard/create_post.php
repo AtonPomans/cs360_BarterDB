@@ -22,7 +22,7 @@ $is_split_allowed = isset($_POST['is_split_allowed']) ? 1 : 0;
 
 // --- Helper function: Get existing item or insert a new one ---
 function getOrCreateItem($conn, $name) {
-    $stmt = $conn->prepare("SELECT item_id FROM items WHERE name = ? LIMIT 1");
+    $stmt = $conn->prepare("SELECT item_id FROM items WHERE LOWER(name) = ? LIMIT 1");
     $stmt->bind_param("s", $name);
     $stmt->execute();
     $stmt->bind_result($existing_id);
@@ -60,13 +60,9 @@ $stmt->bind_param(
     $offered_item_id,
     $requested_item_id,
     $offered_quantity,
-    $requested_quantity,
+    $requested_quantity
 );
 $stmt->execute();
-
-
-
-
 
 // Post matching logic
 $new_post_id = $conn->insert_id;
@@ -89,7 +85,13 @@ $match_result = $stmt->get_result();
 if ($match = $match_result->fetch_assoc()) {
     $match_post_id = $match['post_id'];
     $match_user_id = $match['poster_id'];
+    
     $match_partner_id = $match['partner_id'];
+    if (!$partner_id || !$match_partner_id) {
+        // leave both posts open, don’t match
+        header("Location: dashboard.php?post=success");
+        exit();
+    }
 
     // Close both posts
     $conn->query("UPDATE barter_post SET status = 'closed' WHERE post_id IN ($new_post_id, $match_post_id)");

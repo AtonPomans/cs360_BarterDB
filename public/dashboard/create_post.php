@@ -89,6 +89,7 @@ $match_result = $stmt->get_result();
 if ($match = $match_result->fetch_assoc()) {
     $match_post_id = $match['post_id'];
     $match_user_id = $match['poster_id'];
+    $match_partner_id = $match['partner_id'];
 
     // Close both posts
     $conn->query("UPDATE barter_post SET status = 'closed' WHERE post_id IN ($new_post_id, $match_post_id)");
@@ -101,18 +102,24 @@ if ($match = $match_result->fetch_assoc()) {
     // Insert into transactions table
     $stmt = $conn->prepare("
         INSERT INTO transactions (
-            post1_id, post2_id, user1_id, user2_id,
-            item1_id, item2_id, hash_code, part_a_code, part_y_code
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            post1_id, post2_id,
+            user_a_id, user_x_id,
+            user_b_id, user_y_id,
+            item1_id, item2_id,
+            hash_code, part_a_code, part_y_code
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
+
     $stmt->bind_param(
-        "iiiiissss",
-        $new_post_id,
-        $match_post_id,
-        $poster_id,
-        $match_user_id,
-        $offered_item_id,
-        $requested_item_id,
+        "iiiiiiissss",
+        $new_post_id,        //this post 
+        $match_post_id,      // other post
+        $poster_id,          // A
+        $match_user_id,      // X
+        $partner_id,         // B
+        $match_partner_id,   // Y
+        $offered_item_id,    // this post's item
+        $requested_item_id,  // item receiving from other post
         $hash,
         $part_a,
         $part_y

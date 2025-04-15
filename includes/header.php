@@ -1,8 +1,21 @@
 
-<?php //header.php
+<?php
 session_start();
 $loggedIn = isset($_SESSION['user_id']);
+$user_name = null;
+
+if ($loggedIn) {
+    include $_SERVER['DOCUMENT_ROOT'] . "/../config/database.php";
+
+    $stmt = $conn->prepare("SELECT name FROM users WHERE user_id = ?");
+    $stmt->bind_param("i", $_SESSION['user_id']);
+    $stmt->execute();
+    $stmt->bind_result($user_name);
+    $stmt->fetch();
+    $stmt->close();
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -57,6 +70,7 @@ $loggedIn = isset($_SESSION['user_id']);
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
                             <i class="fa-solid fa-user fa-lg"></i>
+                            <span class="fw-bold"><?= htmlspecialchars($user_name ?? '') ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
                             <li><a class="dropdown-item" href="#">Profile</a></li>

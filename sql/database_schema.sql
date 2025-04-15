@@ -1,8 +1,8 @@
-CREATE DATABASE barter_db;
+CREATE DATABASE IF NOT EXISTS barter_db;
 USE barter_db;
 
 /* Users Table */
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     email VARCHAR(255) UNIQUE,
@@ -11,15 +11,15 @@ CREATE TABLE users (
 );
 
 /* Items Table */
-CREATE TABLE items (
+CREATE TABLE IF NOT EXISTS items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
-/*    user_id INT, */
+    user_id INT,
     name VARCHAR(255),
-    description TEXT
-/*    FOREIGN KEY (user_id) REFERENCES users(user_id) */
+/*    description TEXT, */
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 
-CREATE TABLE barter_post (
+CREATE TABLE IF NOT EXISTS barter_post (
     post_id INT AUTO_INCREMENT PRIMARY KEY,
     poster_id INT NOT NULL,
     partner_id INT,
@@ -34,7 +34,7 @@ CREATE TABLE barter_post (
     FOREIGN KEY (requested_item) REFERENCES items(item_id)
 );
 
-CREATE TABLE transactions (
+CREATE TABLE IF NOT EXISTS transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     post1_id INT NOT NULL,
     post2_id INT NOT NULL,

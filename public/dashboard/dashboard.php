@@ -30,7 +30,7 @@ $user_id = $_SESSION["user_id"];
             <h4>Offered Item</h4>
             <label>Name:</label>
             <!-- <input type="text" name="offered_name" required> -->
-            <select name="offered_name" id="item" required>
+            <select name="offered_item_id" id="item" required>
                 <option value="">--- Select an item ---</option>
                 <?php
                 if ($item_result->num_rows > 0) {
@@ -51,7 +51,7 @@ $user_id = $_SESSION["user_id"];
             <h4>Requested Item</h4>
             <label>Name:</label>
             <!-- <input type="text" name="requested_name" required> -->
-            <select name="requested_name" id="item" required>
+            <select name="requested_item_id" id="item" required>
                 <option value="">--- Select an item ---</option>
                 <?php
                 if ($item_result->num_rows > 0) {

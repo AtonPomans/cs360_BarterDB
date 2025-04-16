@@ -11,40 +11,15 @@ if (!isset($_SESSION['user_id'])) {
 $poster_id = $_SESSION['user_id'];
 
 // Get form data
-$offered_name = $_POST['offered_name'];
+$offered_item_id = $_POST['offered_item_id'];
 $offered_quantity = $_POST['offered_quantity'];
 
-$requested_name = $_POST['requested_name'];
+$requested_item_id = $_POST['requested_item_id'];
 $requested_quantity = $_POST['requested_quantity'];
 
 $partner_id = !empty($_POST['partner_id']) ? $_POST['partner_id'] : null;
 $is_split_allowed = isset($_POST['is_split_allowed']) ? 1 : 0;
 
-// --- Helper function: Get existing item or insert a new one ---
-function getOrCreateItem($conn, $name) {
-    $stmt = $conn->prepare("SELECT item_id FROM items WHERE LOWER(name) = ? LIMIT 1");
-    $stmt->bind_param("s", $name);
-    $stmt->execute();
-    $stmt->bind_result($existing_id);
-    if ($stmt->fetch()) {
-        $stmt->close();
-        return $existing_id;
-    }
-    $stmt->close();
-
-    // Insert new item
-    $stmt = $conn->prepare("INSERT INTO items (name) VALUES (?)");
-    $stmt->bind_param("s", $name);
-    $stmt->execute();
-    $new_id = $stmt->insert_id;
-    $stmt->close();
-
-    return $new_id;
-}
-
-// Get or create items
-$offered_item_id = getOrCreateItem($conn, $offered_name);
-$requested_item_id = getOrCreateItem($conn, $requested_name);
 
 // Insert barter post
 $stmt = $conn->prepare("
@@ -64,6 +39,7 @@ $stmt->bind_param(
 );
 $stmt->execute();
 
+
 // Post matching logic
 $new_post_id = $conn->insert_id;
 
@@ -81,11 +57,12 @@ $stmt->bind_param("iii", $requested_item_id, $offered_item_id, $poster_id);
 $stmt->execute();
 $match_result = $stmt->get_result();
 
+
 // If match found
 if ($match = $match_result->fetch_assoc()) {
     $match_post_id = $match['post_id'];
     $match_user_id = $match['poster_id'];
-    
+
     $match_partner_id = $match['partner_id'];
     if (!$partner_id || !$match_partner_id) {
         // leave both posts open, don’t match
@@ -114,7 +91,7 @@ if ($match = $match_result->fetch_assoc()) {
 
     $stmt->bind_param(
         "iiiiiiissss",
-        $new_post_id,        //this post 
+        $new_post_id,        //this post
         $match_post_id,      // other post
         $poster_id,          // A
         $match_user_id,      // X

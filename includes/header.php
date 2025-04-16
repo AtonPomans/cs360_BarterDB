@@ -60,7 +60,7 @@ if ($loggedIn) {
                 <ul class="navbar-nav align-items-center">
 
                     <li class="nav-item me-2">
-                        <a class="nav-link position-relative" href="#">
+                        <a class="nav-link position-relative" href="/user/cart.php">
                             <i class="fa-solid fa-cart-shopping fa-lg"></i>
                         </a>
                     </li>

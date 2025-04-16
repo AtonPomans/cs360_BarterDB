@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     name VARCHAR(255),
-/*    description TEXT, */
+    description TEXT,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
 

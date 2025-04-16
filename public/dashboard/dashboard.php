@@ -11,7 +11,6 @@ if (!$loggedIn) {
 }
 
 $user_id = $_SESSION["user_id"];
-$result = $conn->query("SELECT * FROM items WHERE user_id = $user_id");
 ?>
 
 <body>
@@ -24,17 +23,47 @@ $result = $conn->query("SELECT * FROM items WHERE user_id = $user_id");
         <h2>Create a New Barter Post</h2>
 
         <form method="POST" action="create_post.php">
+            <?php
+            $item_result = $conn->query("SELECT * FROM items");
+            ?>
+
             <h4>Offered Item</h4>
             <label>Name:</label>
-            <input type="text" name="offered_name" required>
+            <!-- <input type="text" name="offered_name" required> -->
+            <select name="offered_name" id="item" required>
+                <option value="">--- Select an item ---</option>
+                <?php
+                if ($item_result->num_rows > 0) {
+                    while($row = $item_result->fetch_assoc()) {
+                        echo "<option value='" . $row['item_id'] . "'>" . htmlspecialchars($row['name']) . "</option>";
+                    }
+                }
+                ?>
+            </select>
             <label>Quantity:</label>
             <input type="number" name="offered_quantity" value="1" min="1">
 
+
+            <?php
+            $item_result = $conn->query("SELECT * FROM items");
+            ?>
+
             <h4>Requested Item</h4>
             <label>Name:</label>
-            <input type="text" name="requested_name" required>
+            <!-- <input type="text" name="requested_name" required> -->
+            <select name="requested_name" id="item" required>
+                <option value="">--- Select an item ---</option>
+                <?php
+                if ($item_result->num_rows > 0) {
+                    while($row = $item_result->fetch_assoc()) {
+                        echo "<option value='" . $row['item_id'] . "'>" . htmlspecialchars($row['name']) . "</option>";
+                    }
+                }
+                ?>
+            </select>
             <label>Quantity:</label>
             <input type="number" name="requested_quantity" value="1" min="1">
+
 
             <label for="partner_id">Your Trusted Partner (who will act on your behalf):</label>
             <select name="partner_id" required>

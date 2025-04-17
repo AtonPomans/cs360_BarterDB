@@ -7,6 +7,8 @@ CREATE TABLE IF NOT EXISTS users (
     name VARCHAR(255),
     email VARCHAR(255) UNIQUE,
     password_hash VARCHAR(255),
+    is_admin BOOLEAN DEFAULT 0,
+    is_suspended BOOLEAN DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -64,14 +66,14 @@ CREATE TABLE IF NOT EXISTS transactions (
 );
 
 /* test users so no need to re-register (password same as name) */
-INSERT INTO users (name, email, password_hash)
+INSERT INTO users (name, email, password_hash, is_admin)
 VALUES
-('aaa', 'aaa@aaa.com', '$2y$10$o19a0uY.KizfX/qoIaz62uabNDnBEcsH1akkrA.vPuNJEXkWJg8OS'),
-('bbb', 'bbb@bbb.com', '$2y$10$2Z1x9JmlPqtT5QjEnSC0TODLQeDmxPMd0IynydDLzLaz57NzVVJGu'),
-('ccc', 'ccc@ccc.com', '$2y$10$2l83k0pLjbQrvoQP3K2q7.fY2VnUd6tpcOVNMIIi15SeHSxd1OqdW'),
-('ddd', 'ddd@ddd.com', '$2y$10$2y61H.gegwQR/iRqqbVTtej7RYcXThVnd0w3yES6CGLgkzTVQHeX.'),
-('eee', 'eee@eee.com', '$2y$10$E1.VKsiKSOOF2G6HK9cYIuh7BF865zWRs6Zt.aYB00/v7gEGH6tqW'),
-('www', 'www@www.com', '$2y$10$Qe1mVP.lWb/GqPfMcHZuyuJZmBPjCWLO6fOMRv9pGZqfswtT/8ziy'),
-('xxx', 'xxx@xxx.com', '$2y$10$xz/hwO/6IgJ338ijiRWPV.Dt0Mi97A27cMNrhyBkelMhSZrsVwTcu'),
-('yyy', 'yyy@yyy.com', '$2y$10$0JtFHDd6.1qEJeuqcg9izeeDfHmfrdnNXHWKNA1R4mqg1nYSW9XCm'),
-('zzz', 'zzz@zzz.com', '$2y$10$ftxQyHuVBVAIBXjtu3Yq7.7ci/Xqk3I3.YFHGBKYM41ZQNE4o5PoK');
+('aaa', 'aaa@aaa.com', '$2y$10$o19a0uY.KizfX/qoIaz62uabNDnBEcsH1akkrA.vPuNJEXkWJg8OS', 1),
+('bbb', 'bbb@bbb.com', '$2y$10$2Z1x9JmlPqtT5QjEnSC0TODLQeDmxPMd0IynydDLzLaz57NzVVJGu', 0),
+('ccc', 'ccc@ccc.com', '$2y$10$2l83k0pLjbQrvoQP3K2q7.fY2VnUd6tpcOVNMIIi15SeHSxd1OqdW', 0),
+('ddd', 'ddd@ddd.com', '$2y$10$2y61H.gegwQR/iRqqbVTtej7RYcXThVnd0w3yES6CGLgkzTVQHeX.', 0),
+('eee', 'eee@eee.com', '$2y$10$E1.VKsiKSOOF2G6HK9cYIuh7BF865zWRs6Zt.aYB00/v7gEGH6tqW', 0),
+('www', 'www@www.com', '$2y$10$Qe1mVP.lWb/GqPfMcHZuyuJZmBPjCWLO6fOMRv9pGZqfswtT/8ziy', 0),
+('xxx', 'xxx@xxx.com', '$2y$10$xz/hwO/6IgJ338ijiRWPV.Dt0Mi97A27cMNrhyBkelMhSZrsVwTcu', 0),
+('yyy', 'yyy@yyy.com', '$2y$10$0JtFHDd6.1qEJeuqcg9izeeDfHmfrdnNXHWKNA1R4mqg1nYSW9XCm', 0),
+('zzz', 'zzz@zzz.com', '$2y$10$ftxQyHuVBVAIBXjtu3Yq7.7ci/Xqk3I3.YFHGBKYM41ZQNE4o5PoK', 0);

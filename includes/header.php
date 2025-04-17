@@ -1,16 +1,18 @@
-
 <?php
-session_start();
+if (session_status() !== PHP_SESSION_ACTIVE) {
+    session_start();
+}
 $loggedIn = isset($_SESSION['user_id']);
 $user_name = null;
+$isAdmin = false;
 
 if ($loggedIn) {
     include $_SERVER['DOCUMENT_ROOT'] . "/../config/database.php";
 
-    $stmt = $conn->prepare("SELECT name FROM users WHERE user_id = ?");
+    $stmt = $conn->prepare("SELECT name, is_admin FROM users WHERE user_id = ?");
     $stmt->bind_param("i", $_SESSION['user_id']);
     $stmt->execute();
-    $stmt->bind_result($user_name);
+    $stmt->bind_result($user_name, $isAdmin);
     $stmt->fetch();
     $stmt->close();
 }
@@ -54,6 +56,14 @@ if ($loggedIn) {
                     <li class="nav-item">
                         <a class="nav-link <?php echo ($activePage === 'Contact') ? 'active' : ''; ?>" href="/contact.php">Contact</a>
                     </li>
+                    <?php if ($isAdmin): ?>
+                        <li class="nav-item">
+                            <a class="nav-link <?php echo ($activePage === 'Admin') ? 'active' : ''; ?>" href="/dashboard/admin_dashboard.php">
+                                Admin Panel
+                            </a>
+                        </li>
+                    <?php endif; ?>
+
                 </ul>
 
                 <!-- Right Side Icons -->

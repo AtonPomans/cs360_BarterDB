@@ -1,14 +1,16 @@
 <?php
+session_start();
 $activePage = 'Home';
+if (isset($_SESSION["user_id"])) {
+    header("Location: /dashboard/dashboard.php"); // Redirect logged-in users
+    exit();
+}
 include $_SERVER['DOCUMENT_ROOT'] . "/../includes/header.php";
 
 include $_SERVER['DOCUMENT_ROOT'] . "/../config/database.php"; // Ensure this file exists and is correctly set up
 
 // Check if the user is logged in
-if (isset($_SESSION["user_id"])) {
-    header("Location: /dashboard/dashboard.php"); // Redirect logged-in users
-    exit();
-}
+
 ?>
 
 <body>

@@ -11,21 +11,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($email) || empty($password)) {
         $errors[] = "All fields are required.";
     } else {
-        $stmt = $conn->prepare("SELECT user_id, name, password_hash FROM users WHERE email = ?");
+        $stmt = $conn->prepare("SELECT user_id, name, password_hash, is_suspended FROM users WHERE email = ?");
         $stmt->bind_param("s", $email);
         $stmt->execute();
         $stmt->store_result();
 
         if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $name, $hashed_password);
+            $stmt->bind_result($id, $name, $hashed_password, $is_suspended);
             $stmt->fetch();
 
-            if (password_verify($password, $hashed_password)) {
+            if ($is_suspended) {
+                $errors[] = "Your account is suspended. Please contact support.";
+            } 
+            elseif (password_verify($password, $hashed_password)) {
                 $_SESSION["user_id"] = $id;
                 $_SESSION["user_name"] = $name;
                 header("Location: /dashboard/dashboard.php");
                 exit();
-            } else {
+            } 
+            else {
                 $errors[] = "Incorrect password.";
             }
         } else {

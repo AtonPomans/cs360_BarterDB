@@ -21,49 +21,67 @@ $user_id = $_SESSION["user_id"];
         <h2>Create a New Barter Post</h2>
 
         <form method="POST" action="create_post.php">
-            <?php
-            $item_result = $conn->query("SELECT * FROM items");
-            ?>
-
-            <h4>Offered Item</h4>
-            <label>Name:</label>
-            <!-- <input type="text" name="offered_name" required> -->
-            <select name="offered_item_id" id="item" required>
-                <option value="">--- Select an item ---</option>
-                <?php
-                if ($item_result->num_rows > 0) {
-                while($row = $item_result->fetch_assoc()) {
-                echo "<option value='" . $row['item_id'] . "'>" . htmlspecialchars($row['name']) . "</option>";
-                }
-                }
-                ?>
-            </select>
-            <label>Quantity:</label>
-            <input type="number" name="offered_quantity" value="1" min="1">
-
 
             <?php
             $item_result = $conn->query("SELECT * FROM items");
             ?>
 
-            <h4>Requested Item</h4>
-            <label>Name:</label>
-            <!-- <input type="text" name="requested_name" required> -->
-            <select name="requested_item_id" id="item" required>
-                <option value="">--- Select an item ---</option>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4 class="mt-3">Offered Item</h4>
+                    <label>Name:</label>
+                    <select name="offered_item_id" id="offeredItemSelect" required class="form-control">
+                        <option value="">--- Select an item ---</option>
+                        <?php
+                        while ($row = $item_result->fetch_assoc()) {
+                        echo "<option value='" . $row['item_id'] . "'
+                        data-value='" . htmlspecialchars($row['value']) . "'
+                        data-description='" . htmlspecialchars($row['description']) . "'>"
+                        . htmlspecialchars($row['name']) .
+                        "</option>";
+                        }
+                        ?>
+                    </select>
+                    <label>Quantity:</label>
+                    <input type="number" name="offered_quantity" id="offeredQuantity" value="1" min="1" class="form-control mb-2">
+                    <div id="offeredItemDetails" class="mt-2 mb-3">
+                        <p><strong>Value:</strong> <span id="offeredItemValue">--</span></p>
+                        <p><strong>Description:</strong> <span id="offeredItemDescription">--</span></p>
+                    </div>
+                </div>
+
+
                 <?php
-                if ($item_result->num_rows > 0) {
-                while($row = $item_result->fetch_assoc()) {
-                echo "<option value='" . $row['item_id'] . "'>" . htmlspecialchars($row['name']) . "</option>";
-                }
-                }
+                $item_result = $conn->query("SELECT * FROM items");
                 ?>
-            </select>
-            <label>Quantity:</label>
-            <input type="number" name="requested_quantity" value="1" min="1">
+
+                <div class="col-md-6">
+                    <h4 class="mt-3">Requested Item</h4>
+                    <label>Name:</label>
+                    <select name="requested_item_id" id="requestedItemSelect" required class="form-control">
+                        <option value="">--- Select an item ---</option>
+                        <?php
+                        while ($row = $item_result->fetch_assoc()) {
+                        echo "<option value='" . $row['item_id'] . "'
+                        data-value='" . htmlspecialchars($row['value']) . "'
+                        data-description='" . htmlspecialchars($row['description']) . "'>"
+                        . htmlspecialchars($row['name']) .
+                        "</option>";
+                        }
+                        ?>
+                    </select>
+                    <label>Quantity:</label>
+                    <input type="number" name="requested_quantity" id="requestedQuantity" value="1" min="1" class="form-control mb-2">
+                    <div id="requestedItemDetails" class="mt-2 mb-3">
+                        <p><strong>Value:</strong> <span id="requestedItemValue">--</span></p>
+                        <p><strong>Description:</strong> <span id="requestedItemDescription">--</span></p>
+                    </div>
+                </div>
+            </div>
 
 
-            <label for="partner_id">Your Trusted Partner (who will act on your behalf):</label>
+            <h4 class="mt-3">Your Trusted Partner</h4>
+            <label for="partner_id">(who will act on your behalf):</label>
             <select name="partner_id" required>
                 <option value="">Select a partner</option>
                 <?php
@@ -121,6 +139,8 @@ $user_id = $_SESSION["user_id"];
             <?php endwhile; ?>
         </div>
     </div>
+
+    <script src="/assets/js/updateItemAttributes.js"></script>
 
 </body>
 

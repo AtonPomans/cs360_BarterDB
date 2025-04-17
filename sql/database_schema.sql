@@ -15,12 +15,12 @@ CREATE TABLE IF NOT EXISTS users (
 /* Items Table */
 CREATE TABLE IF NOT EXISTS items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
     name VARCHAR(255),
     description TEXT,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    value INT DEFAULT 0
 );
 
+/* Post Table */
 CREATE TABLE IF NOT EXISTS barter_post (
     post_id INT AUTO_INCREMENT PRIMARY KEY,
     poster_id INT NOT NULL,
@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS barter_post (
     FOREIGN KEY (requested_item) REFERENCES items(item_id)
 );
 
+/* Transactions Table */
 CREATE TABLE IF NOT EXISTS transactions (
     transaction_id INT AUTO_INCREMENT PRIMARY KEY,
     post1_id INT NOT NULL,

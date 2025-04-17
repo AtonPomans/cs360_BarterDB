@@ -42,6 +42,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_user_id'])) {
 $conn->query("ALTER TABLE users ADD COLUMN IF NOT EXISTS is_suspended BOOLEAN DEFAULT 0");
 
 include $_SERVER['DOCUMENT_ROOT'] . "/../includes/header.php";
+
+
+// // item pages logic
+$items_per_page = 10;
+
+// get current page
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+$offset = ($page - 1) * $items_per_page;
+
+// get total # of items
+$total_result = $conn->query("SELECT COUNT(*) as count FROM items");
+$total_items = $total_result->fetch_assoc()['count'];
+$total_pages = ceil($total_items / $items_per_page);
+
+// get items for current page
+$stmt = $conn->prepare("SELECT * FROM items LIMIT ? OFFSET ?");
+$stmt->bind_param("ii", $items_per_page, $offset);
+$stmt->execute();
+$items = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -133,6 +152,64 @@ include $_SERVER['DOCUMENT_ROOT'] . "/../includes/header.php";
 <form id="deleteForm" method="POST" style="display: none;">
     <input type="hidden" id="delete_user_id" name="delete_user_id">
 </form>
+
+<hr>
+
+        <h2>Edit Items</h2>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Current Value</th>
+                    <th>Update Value</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php while ($item = $items->fetch_assoc()): ?>
+                <tr>
+                    <td><?= htmlspecialchars($item['name']) ?></td>
+                    <td><?= htmlspecialchars($item['description']) ?></td>
+                    <td><?= htmlspecialchars($item['value']) ?></td>
+                    <form method="POST" action="update_item_value.php">
+                        <td>
+                            <input type="number" name="new_value" value="<?= htmlspecialchars($item['value']) ?>" min="0" step="0.01" class="form-control">
+                        </td>
+                        <td>
+                            <input type="hidden" name="item_id" value="<?= $item['item_id'] ?>">
+                            <button type="submit" class="btn btn-sm btn-primary">Update</button>
+                        </td>
+                    </form>
+                </tr>
+                <?php endwhile; ?>
+            </tbody>
+        </table>
+
+        <!-- switch item page links -->
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <?php if ($page > 1): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?= $page - 1 ?>">Previous</a>
+                </li>
+                <?php endif; ?>
+
+                <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                <li class="page-item <?= $i === $page ? 'active' : '' ?>">
+                    <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                </li>
+                <?php endfor; ?>
+
+                <?php if ($page < $total_pages): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?page=<?= $page + 1 ?>">Next</a>
+                </li>
+                <?php endif; ?>
+            </ul>
+        </nav>
+
+
 
 <hr>
 

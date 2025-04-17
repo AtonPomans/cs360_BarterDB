@@ -104,7 +104,7 @@ $user_id = $_SESSION["user_id"];
 
                 <!-- Code Input Form for B -->
                 <?php if ($user_id == $tx['user_b_id'] && !$tx['e_sent']): ?>
-                <form method="POST" action="verify_b.php">
+                <form method="POST" action="/dashboard/verify_b.php">
                     <input type="hidden" name="transaction_id" value="<?= $tx['transaction_id'] ?>">
                     <label>Enter 8-digit Code from A:</label>
                     <input type="text" name="part_a_code" maxlength="8" required>
@@ -114,7 +114,7 @@ $user_id = $_SESSION["user_id"];
 
                 <!-- Code Input Form for Y -->
                 <?php if ($user_id == $tx['user_y_id'] && $tx['e_sent'] && !$tx['p_sent']): ?>
-                <form method="POST" action="verify_y.php">
+                <form method="POST" action="/dashboard/verify_y.php">
                     <input type="hidden" name="transaction_id" value="<?= $tx['transaction_id'] ?>">
                     <label>Enter 8-digit Code from X:</label>
                     <input type="text" name="part_y_code" maxlength="8" required>

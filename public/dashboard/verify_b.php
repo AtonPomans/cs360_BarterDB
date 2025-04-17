@@ -24,5 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         echo "❌ Transaction not found or already processed.";
     }
+    header("Location: /cart.php");
+    exit();
 }
 ?>

@@ -134,6 +134,14 @@ $user_id = $_SESSION["user_id"];
                 <strong>Post #<?= $row['post_id'] ?></strong><br>
                 Offering: <?= $row['offered_name'] ?> (x<?= $row['offered_quantity'] ?>)<br>
                 Requesting: <?= $row['requested_name'] ?> (x<?= $row['requested_quantity'] ?>)<br>
+                Status: <?= ucfirst($row['status']) ?><br>
+
+                <?php if ($row['transaction_id']): ?>
+                    <span class="success">✅ Matched (Transaction #<?= $row['transaction_id'] ?>)</span><br>
+                    Trade Status: <?= $row['is_complete'] ? "✅ Completed" : "⏳ In Progress" ?><br>
+                <?php else: ?>
+                    <span class="warning">⏳ Waiting for match...</span><br>
+                <?php endif; ?>
             </div>
             <hr>
             <?php endwhile; ?>

@@ -110,9 +110,21 @@ $user_id = $_SESSION["user_id"];
 
             <?php
             $sql = "
-            SELECT *
-            FROM barter_post
-            WHERE status = 'open'
+            SELECT
+            bp.post_id,
+            bp.offered_quantity,
+            bp.requested_quantity,
+            bp.poster_id,
+            bp.partner_id,
+            bp.status,
+            i_off.name   AS offered_name,
+            i_req.name   AS requested_name
+            FROM barter_post AS bp
+            JOIN items AS i_off
+            ON bp.offered_item   = i_off.item_id
+            JOIN items AS i_req
+            ON bp.requested_item = i_req.item_id
+            WHERE bp.status = 'open'
             ";
             $result = $conn->query($sql);
             ?>

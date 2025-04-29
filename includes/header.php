@@ -53,9 +53,9 @@ if ($loggedIn) {
                     <li class="nav-item">
                         <a class="nav-link <?php echo ($activePage === 'Dashboard') ? 'active' : ''; ?>" href="/dashboard/dashboard.php">Dashboard</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link <?php echo ($activePage === 'Contact') ? 'active' : ''; ?>" href="/contact.php">Contact</a>
-                    </li>
+                    <!--<li class="nav-item">-->
+                    <!--    <a class="nav-link <?php echo ($activePage === 'Contact') ? 'active' : ''; ?>" href="/contact.php">Contact</a>-->
+                    <!--</li>-->
                     <?php if ($isAdmin): ?>
                         <li class="nav-item">
                             <a class="nav-link <?php echo ($activePage === 'Admin') ? 'active' : ''; ?>" href="/dashboard/admin_dashboard.php">
@@ -83,9 +83,9 @@ if ($loggedIn) {
                             <span class="fw-bold"><?= htmlspecialchars($user_name ?? '') ?></span>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Settings</a></li>
-                            <li><hr class="dropdown-divider"></li>
+                            <!--<li><a class="dropdown-item" href="#">Profile</a></li>-->
+                            <!--<li><a class="dropdown-item" href="#">Settings</a></li>-->
+                            <!--<li><hr class="dropdown-divider"></li>-->
                             <li><a class="dropdown-item" href="/auth/logout.php">Logout</a></li>
                         </ul>
                     </li>

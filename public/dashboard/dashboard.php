@@ -83,7 +83,7 @@ $user_id = $_SESSION["user_id"];
             <h4 class="mt-3">Your Trusted Partner</h4>
             <label for="partner_id">(who will act on your behalf):</label>
             <select name="partner_id" required>
-                <option value="">Select a partner</option>
+                <option value="" class="form-control">Select a partner</option>
                 <?php
                 $stmt = $conn->prepare("SELECT user_id, name FROM users WHERE user_id != ?");
                 $stmt->bind_param("i", $_SESSION['user_id']);
@@ -96,7 +96,7 @@ $user_id = $_SESSION["user_id"];
             </select>
 
             <br><br>
-            <input type="submit" value="Create Barter Post">
+            <input type="submit" class="btn btn-secondary w-25" value="Create Barter Post">
         </form>
 
         <hr>
@@ -110,17 +110,9 @@ $user_id = $_SESSION["user_id"];
 
             <?php
             $sql = "
-            SELECT bp.*,
-            i1.name AS offered_name,
-            i2.name AS requested_name,
-            t.transaction_id,
-            t.is_complete
-            FROM barter_post bp
-            JOIN items i1 ON bp.offered_item = i1.item_id
-            JOIN items i2 ON bp.requested_item = i2.item_id
-            LEFT JOIN transactions t
-            ON t.post1_id = bp.post_id OR t.post2_id = bp.post_id
-            ORDER BY bp.status DESC, bp.post_id DESC
+            SELECT *
+            FROM barter_post
+            WHERE status = 'open'
             ";
             $result = $conn->query($sql);
             ?>
@@ -134,14 +126,11 @@ $user_id = $_SESSION["user_id"];
                 <strong>Post #<?= $row['post_id'] ?></strong><br>
                 Offering: <?= $row['offered_name'] ?> (x<?= $row['offered_quantity'] ?>)<br>
                 Requesting: <?= $row['requested_name'] ?> (x<?= $row['requested_quantity'] ?>)<br>
-                Status: <?= ucfirst($row['status']) ?><br>
 
-                <?php if ($row['transaction_id']): ?>
-                    <span class="success">✅ Matched (Transaction #<?= $row['transaction_id'] ?>)</span><br>
-                    Trade Status: <?= $row['is_complete'] ? "✅ Completed" : "⏳ In Progress" ?><br>
-                <?php else: ?>
-                    <span class="warning">⏳ Waiting for match...</span><br>
-                <?php endif; ?>
+                <form method="POST" action="submit_trade.php" style="margin-top: 10px;">
+                    <input type="hidden" name="listing_id" value="<?= htmlspecialchars($row['post_id']) ?>">
+                    <button type="submit" class="btn btn-secondary">Submit Trade</button>
+                </form>
             </div>
             <hr>
             <?php endwhile; ?>

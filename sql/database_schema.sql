@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS items (
     item_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     description TEXT,
-    value INT DEFAULT 0
+    value decimal(20,2) DEFAULT 0
 );
 
 /* Post Table */

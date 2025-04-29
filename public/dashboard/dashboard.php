@@ -138,11 +138,6 @@ $user_id = $_SESSION["user_id"];
                 <strong>Post #<?= $row['post_id'] ?></strong><br>
                 Offering: <?= $row['offered_name'] ?> (x<?= $row['offered_quantity'] ?>)<br>
                 Requesting: <?= $row['requested_name'] ?> (x<?= $row['requested_quantity'] ?>)<br>
-
-                <form method="POST" action="submit_trade.php" style="margin-top: 10px;">
-                    <input type="hidden" name="listing_id" value="<?= htmlspecialchars($row['post_id']) ?>">
-                    <button type="submit" class="btn btn-secondary">Submit Trade</button>
-                </form>
             </div>
             <hr>
             <?php endwhile; ?>

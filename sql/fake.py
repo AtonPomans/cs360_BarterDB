@@ -1,4 +1,5 @@
 import mysql.connector
+import random
 from faker import Faker
 from faker_commerce import Provider
 
@@ -29,10 +30,11 @@ fake.add_provider(Provider)
 for _ in range(50):  # You can change the number of items
     item_name = fake.ecommerce_name().capitalize()
     item_desc = fake.text(max_nb_chars=150)
+    item_value = (random.randint(1, 10000))/100
     try:
         cur.execute(
-            "INSERT INTO items (name, description) VALUES (%s, %s)",
-            (item_name, item_desc)
+            "INSERT INTO items (name, description, value) VALUES (%s, %s, %s)",
+            (item_name, item_desc, item_value)
         )
     except mysql.connector.Error as err:
         print("X Failed to insert item:", err)
